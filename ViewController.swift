@@ -77,7 +77,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
-    
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
            guard !isProcessingQRCode else { return }
            
@@ -85,6 +84,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { continue }
                guard let stringValue = readableObject.stringValue else { continue }
                isProcessingQRCode = true
+               self.makePhoneVibrate()
                showQRCodeAlert(stringValue)
            }
        }
@@ -94,10 +94,12 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let alert = UIAlertController(title: "QR Code", message: stringValue, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Retake", style: .default, handler: { _ in
             self.isProcessingQRCode = false
+            
         }))
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.isProcessingQRCode = false
             self.navigateToSecondVC(stringValue)
+            
             print("value : \(stringValue)")
         }))
         present(alert, animated: true, completion: nil)
@@ -108,5 +110,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         self.isProcessingQRCode = false
         secondVC.qrCodeValue = stringValue
         navigationController?.pushViewController(secondVC, animated: true)
+    }
+    
+    func makePhoneVibrate(){
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
 }
