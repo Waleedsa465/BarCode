@@ -67,7 +67,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             DispatchQueue.main.async { [weak self] in
                 self?.video = AVCaptureVideoPreviewLayer(session: (self?.session!)!)
                 self?.video.frame = self?.view.layer.bounds ?? CGRect.zero
-                self?.video.videoGravity = .resizeAspectFill // Make sure the aspect ratio is maintained while filling the screen
+                self?.video.videoGravity = .resizeAspectFill 
                 self?.view.layer.addSublayer(self?.video ?? CALayer())
 
                 DispatchQueue.global(qos: .background).async {
